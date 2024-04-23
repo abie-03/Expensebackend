@@ -1,5 +1,6 @@
-const { Expense } = require("./models/schema.js");
-//post method
+const Expense = require("../models/schema.js");
+
+// Post method - Add new expense
 async function addNewExpense(request, response) {
   try {
     await Expense.create({
@@ -12,29 +13,31 @@ async function addNewExpense(request, response) {
       message: "entry successfully added",
     });
   } catch (error) {
+    console.error("Error adding new expense:", error);
     response.status(500).json({
       status: "failure",
       message: "entry not created",
-      error: error,
+      error: error.message, // Return only the error message for security reasons
     });
   }
 }
 
-//get method
+// Get method - Retrieve all expenses
 async function getExpense(request, response) {
   try {
-    await Expense.find();
+    const expenseDetails = await Expense.find();
     response.status(200).json(expenseDetails);
   } catch (error) {
+    console.error("Error fetching expenses:", error);
     response.status(500).json({
-      Status: "failue",
+      status: "failure",
       message: "Could not fetch data",
-      error: error,
+      error: error.message,
     });
   }
 }
 
-//delete method
+// Delete method - Delete an expense
 async function deleteExpense(request, response) {
   try {
     await Expense.findByIdAndDelete(request.params.id);
@@ -43,18 +46,19 @@ async function deleteExpense(request, response) {
       message: "entry deleted",
     });
   } catch (error) {
+    console.error("Error deleting expense:", error);
     response.status(500).json({
       status: "failure",
       message: "could not delete entry",
-      error: "error",
+      error: error.message,
     });
   }
 }
 
-//update method
+// Update method - Update an expense
 async function updateExpense(request, response) {
   try {
-    await Expense.findByIdAndDelete(request.params.id, {
+    await Expense.findByIdAndUpdate(request.params.id, {
       amount: request.body.amount,
       category: request.body.category,
       date: request.body.date,
@@ -64,11 +68,13 @@ async function updateExpense(request, response) {
       message: "entry updated",
     });
   } catch (error) {
+    console.error("Error updating expense:", error);
     response.status(500).json({
       status: "failure",
       message: "could not update entry",
-      error: "error",
+      error: error.message,
     });
   }
 }
+
 module.exports = { addNewExpense, getExpense, deleteExpense, updateExpense };

@@ -14,17 +14,19 @@ Collections - 1. Expense Details(amount, category, date)
 const bodyParser = require("body-parser");
 const express = require("express");
 const mongoose = require("mongoose");
-const { Expense } = require("./models/schema.js");
-const cors = require("cors");
 
+const cors = require("cors");
+const expenseRoutes = require("./router/expenseRoute.js");
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+app.use("/expense", expenseRoutes);
 async function connectToDb() {
   try {
     await mongoose.connect(
       "mongodb+srv://abiaksh03:abi030304@cluster0.j1nnznx.mongodb.net/ExpenseTracker?retryWrites=true&w=majority&appName=Cluster0"
     );
+    console.log("Connection established successfully");
     const port = process.env.PORT || 8000;
     app.listen(port, function () {
       console.log(`Listening in port ${port}`);
@@ -36,9 +38,6 @@ async function connectToDb() {
 }
 connectToDb();
 
-app.get("/", function (request, response) {
-  response.send("works");
-});
 //generally we do crud operation in the following way -- for my expense tracker application, crud operation is in expensecontroller.js
 
 // post methods -> data is received from users then the data is added to data base

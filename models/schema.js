@@ -33,4 +33,4 @@ const Expense = mongoose.model("ExpenseDetails", expenseDetailsSchema);
 // const User = mongoose.model("UserDetails", userDetailsSchema);
 
 //export
-module.exports = { Expense };
+module.exports = Expense;
